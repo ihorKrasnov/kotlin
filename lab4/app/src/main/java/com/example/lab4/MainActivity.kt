@@ -1,47 +1,46 @@
 package com.example.lab4
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.lab4.ui.theme.Lab4Theme
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: SongsAdapter
+
+    private val songs = mutableListOf<Song>(
+        Song("Song 1", "Artist 1", "3:30", "Album 1"),
+        Song("Song 2", "Artist 2", "4:15", "Album 2"),
+        Song("Song 3", "Artist 3", "2:45", "Album 3")
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            Lab4Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        if (songs.isEmpty()) {
+            Toast.makeText(this, "Список пісень порожній", Toast.LENGTH_SHORT).show()
+        } else {
+            adapter = SongsAdapter(songs) { song -> showSongDetails(song) }
+            recyclerView.adapter = adapter
         }
+
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Lab4Theme {
-        Greeting("Android")
+    private fun showSongDetails(song: Song) {
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra("SONG_TITLE", song.title)
+            putExtra("SONG_ARTIST", song.artist)
+            putExtra("SONG_DURATION", song.duration)
+            putExtra("SONG_ALBUM", song.album)
+        }
+        startActivity(intent)
     }
 }
