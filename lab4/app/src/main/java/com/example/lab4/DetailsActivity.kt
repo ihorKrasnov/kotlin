@@ -10,17 +10,13 @@ class DetailsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_detail)
 
-        val title = intent.getStringExtra("SONG_TITLE")
-        val artist = intent.getStringExtra("SONG_ARTIST")
-        val duration = intent.getStringExtra("SONG_DURATION")
-        val album = intent.getStringExtra("SONG_ALBUM")
+        val song = Song.fromJson(intent.getStringExtra("SONG"))
 
-        findViewById<TextView>(R.id.songTitle).text = title
-        findViewById<TextView>(R.id.songArtist).text = artist
-        findViewById<TextView>(R.id.songDuration).text = duration
-        findViewById<TextView>(R.id.songAlbum).text = album
+        findViewById<TextView>(R.id.songTitle).text = song.title
+        findViewById<TextView>(R.id.songArtist).text = song.artist
+        findViewById<TextView>(R.id.songDuration).text = song.duration
+        findViewById<TextView>(R.id.songAlbum).text = song.album
 
-        // Закриває цю активність та повертає назад
         findViewById<Button>(R.id.backButton).setOnClickListener {
             finish()
         }

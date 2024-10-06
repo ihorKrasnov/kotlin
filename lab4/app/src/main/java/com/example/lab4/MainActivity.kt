@@ -2,7 +2,8 @@ package com.example.lab4
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,12 +23,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val emptyView: TextView = findViewById(R.id.emptyView)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         if (songs.isEmpty()) {
-            Toast.makeText(this, "Список пісень порожній", Toast.LENGTH_SHORT).show()
+            recyclerView.visibility = View.GONE
+            emptyView.visibility = View.VISIBLE
         } else {
+            recyclerView.visibility = View.VISIBLE
+            emptyView.visibility = View.GONE
+
             adapter = SongsAdapter(songs) { song -> showSongDetails(song) }
             recyclerView.adapter = adapter
         }
@@ -36,10 +42,7 @@ class MainActivity : ComponentActivity() {
 
     private fun showSongDetails(song: Song) {
         val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("SONG_TITLE", song.title)
-            putExtra("SONG_ARTIST", song.artist)
-            putExtra("SONG_DURATION", song.duration)
-            putExtra("SONG_ALBUM", song.album)
+            putExtra("SONG", song.toJson())
         }
         startActivity(intent)
     }

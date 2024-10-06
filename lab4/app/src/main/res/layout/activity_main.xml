@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Список пісень порожній! Додайте улюблені хіти сюди!!!"
+        android:gravity="center"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
